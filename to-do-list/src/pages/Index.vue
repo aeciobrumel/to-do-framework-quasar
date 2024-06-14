@@ -24,7 +24,7 @@
           <div class="categories">
             <div class="category" @click="showCategoryScreen">
               <div class="left">
-                <img src="../assets/img/boy.png" alt="sun" />
+                <img src="../assets/img/calendar.png" alt="sun" />
                 <div class="content">
                   <h1>Pessoal</h1>
                   <p>5 Tasks</p>
@@ -64,7 +64,7 @@
                 <span class="checkmark">
                   <q-icon name="check" />
                 </span>
-                <p>{{ task.name }}</p>
+                <p>{{ task.name }}ssssss</p>
               </label>
               <div class="delete">
                 <q-icon name="delete" />
@@ -117,8 +117,11 @@ export default {
     return {
       totalTasks: 5,
       tasks: [
-        { id: 1, name: "Buy a new car lorem" },
-        // Adicione outras tarefas aqui
+        { id: 1, name: "Buy a new car" },
+        { id: 2, name: "Complete project report" },
+        { id: 3, name: "Read a book" },
+        { id: 4, name: "Exercise for 30 minutes" },
+        { id: 5, name: "Plan weekend trip" },
       ],
       newTask: "",
       newTaskCategory: "",
