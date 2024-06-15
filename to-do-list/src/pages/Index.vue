@@ -24,7 +24,7 @@
           <div class="categories">
             <div class="category" @click="showCategoryScreen">
               <div class="left">
-                <img src="../assets/img/calendar.png" alt="sun" />
+                <img src="../assets/img/boy.png" alt="sun" />
                 <div class="content">
                   <h1>Pessoal</h1>
                   <p>5 Tasks</p>
@@ -50,7 +50,7 @@
           </div>
         </div>
         <div class="category-details">
-          <img src="../assets/img/boy.png" alt="" id="category-img" />
+          <img src="statics/images/boy.png" alt="" id="category-img" />
           <div class="details">
             <p id="num-tasks">8 tasks</p>
             <h1 id="category-title">Pessoal</h1>
@@ -64,9 +64,9 @@
                 <span class="checkmark">
                   <q-icon name="check" />
                 </span>
-                <p>{{ task.name }}ssssss</p>
+                <p>{{ task.name }}</p>
               </label>
-              <div class="delete">
+              <div class="delete" @click="deleteTask(task.id)">
                 <q-icon name="delete" />
               </div>
             </div>
@@ -112,110 +112,66 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
+
 export default {
   data() {
     return {
-      totalTasks: 5,
-      tasks: [
-        { id: 1, name: "Buy a new car" },
-        { id: 2, name: "Complete project report" },
-        { id: 3, name: "Read a book" },
-        { id: 4, name: "Exercise for 30 minutes" },
-        { id: 5, name: "Plan weekend trip" },
-      ],
       newTask: "",
       newTaskCategory: "",
-      categories: [
-        { id: 1, name: "Pessoal" },
-        {
-          id: 2,
-          name: "Personal",
-          img: "boy.png",
-        },
-        {
-          id: 3,
-          name: "Work",
-          img: "briefcase.png",
-        },
-        {
-          id: 4,
-          name: "Shopping",
-          img: "shopping.png",
-        },
-        {
-          id: 5,
-          name: "Coding",
-          img: "web-design.png",
-        },
-        {
-          id: 6,
-          name: "Health",
-          img: "healthcare.png",
-        },
-        {
-          id: 7,
-          name: "Fitness",
-          img: "dumbbell.png",
-        },
-        {
-          id: 8,
-          name: "Education",
-          img: "education.png",
-        },
-        {
-          id: 9,
-          name: "Finance",
-          img: "saving.png",
-        },
-      ],
       homeScreenActive: false,
       categoryScreenActive: false,
       addTaskScreenActive: false,
       blackBackdropActive: false,
     };
   },
+  computed: {
+    ...mapGetters(["totalTasks", "allTasks", "allCategories"]),
+  },
   methods: {
+    ...mapActions(["addTask", "deleteTask"]),
     toggleMenu() {
       this.homeScreenActive = !this.homeScreenActive;
-      this.blackBackdropActive = !this.blackBackdropActive;
     },
     showCategoryScreen() {
       this.categoryScreenActive = true;
+      this.blackBackdropActive = true;
     },
     hideCategoryScreen() {
       this.categoryScreenActive = false;
+      this.blackBackdropActive = false;
     },
     showAddTaskScreen() {
       this.addTaskScreenActive = true;
+      this.blackBackdropActive = true;
     },
     hideAddTaskScreen() {
       this.addTaskScreenActive = false;
+      this.blackBackdropActive = false;
     },
     hideAllScreens() {
-      this.homeScreenActive = false;
-      this.blackBackdropActive = false;
       this.categoryScreenActive = false;
       this.addTaskScreenActive = false;
+      this.blackBackdropActive = false;
     },
     addTask() {
-      if (this.newTask && this.newTaskCategory) {
-        this.tasks.push({
-          id: this.tasks.length + 1,
-          name: this.newTask,
-        });
-        this.newTask = "";
-        this.newTaskCategory = "";
-      }
-    },
-    cancelAddTask() {
+      const task = {
+        id: Math.random().toString(36).substring(7),
+        name: this.newTask,
+        category: this.newTaskCategory,
+      };
+      this.addTask(task);
       this.newTask = "";
       this.newTaskCategory = "";
-      this.addTaskScreenActive = false;
+      this.hideAddTaskScreen();
     },
+  },
+  mounted() {
+    this.homeScreenActive = true;
   },
 };
 </script>
 
-<style scoped>
+<style>
 @import "../css/style.css";
 </style>
