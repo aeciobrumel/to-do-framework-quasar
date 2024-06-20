@@ -24,7 +24,11 @@
             v-for="category in allCategories"
             :key="category.value"
           >
-            <div class="category" @click="showCategoryScreen">
+            <div
+              class="category"
+              @click="showCategoryScreen"
+              :key="category.value"
+            >
               <img :src="category.img" :alt="category.label" />
               <div class="content">
                 <h4>{{ category.label }}</h4>
@@ -48,9 +52,9 @@
           <div class="details">
             <!--numero tasks categoria-->
 
-            <p id="num-tasks">tasks</p>
+            <p id="num-tasks">{{ totalCategoryTasks }}tasks</p>
             <!--numero tasks categoria-->
-            <h1 id="category-title">NOME</h1>
+            <h1 id="category-title">{{ categoryTasks }} nome</h1>
             <!--nome categoria-->
           </div>
         </div>
