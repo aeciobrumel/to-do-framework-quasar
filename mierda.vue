@@ -1,7 +1,6 @@
----------------------------------------
 <template>
   <q-page class="flex flex-center">
-    <div class="wrapper" ref="wrapper">
+    <div class="wrapper">
       <div class="screen-backdrop"></div>
       <div class="home-screen screen" :class="{ active: homeScreenActive }">
         <div class="head-wrapper">
@@ -20,13 +19,12 @@
           </div>
         </div>
         <div class="categories-wrapper">
-          <div class="categories">
-            <div
-              class="category"
-              v-for="category in allCategories"
-              :key="category.value"
-              @click="showCategoryScreen(category.value)"
-            >
+          <div
+            class="categories"
+            v-for="category in allCategories"
+            :key="category.value"
+          >
+            <div class="category" @click="showCategoryScreen">
               <img :src="category.img" :alt="category.label" />
               <div class="content">
                 <h4>{{ category.label }}</h4>
@@ -36,8 +34,7 @@
           </div>
         </div>
       </div>
-
-      <div
+      <!-- <div
         class="category-screen screen"
         :class="{ active: categoryScreenActive }"
       >
@@ -47,27 +44,21 @@
           </div>
         </div>
         <div class="category-details">
-          <div class="details" flex>
-            <img :src="getCategoryImage(currentCategory)" alt="Avatar" />
-            <p id="num-tasks">
-              {{ totalCategoryTasks(currentCategory) }} tasks
-            </p>
-            <h3 id="category-title">{{ getCategoryLabel(currentCategory) }}</h3>
+          <img src="statics/images/boy.png" alt="" id="category-img" />
+          <div class="details">
+            <p id="num-tasks">8 tasks</p>
+            <h1 id="category-title">Pessoal</h1>
           </div>
         </div>
         <div class="tasks-wrapper">
           <div class="tasks">
-            <div
-              class="task-wrapper"
-              v-for="task in tasksByCategory(currentCategory)"
-              :key="task.value"
-            >
-              <label class="task">
-                <input type="checkbox" :name="task.label" :id="task.value" />
+            <div class="task-wrapper" v-for="task in allTasks" :key="task.value">
+              <label for="task" class="task">
+                <input type="checkbox" :name="task.name" :id="task.value" />
                 <span class="checkmark">
                   <q-icon name="check" />
                 </span>
-                <p>{{ task.label }}</p>
+                <p>{{ task.name }}</p>
               </label>
               <div class="delete" @click="deleteTask(task.value)">
                 <q-icon name="delete" />
@@ -75,8 +66,7 @@
             </div>
           </div>
         </div>
-      </div>
-
+      </div> -->
       <div class="add-task-btn" @click="showAddTaskScreen">
         <q-icon name="add" />
       </div>
@@ -127,7 +117,6 @@ export default {
       categoryScreenActive: false,
       addTaskScreenActive: false,
       blackBackdropActive: false,
-      currentCategory: "", // variável para armazenar a categoria atualmente selecionada
     };
   },
   computed: {
@@ -137,32 +126,27 @@ export default {
       "allTasks",
       "allCategories",
       "totalCategoryTasks",
-      "tasksByCategory",
-      "categoryImg",
     ]),
   },
   methods: {
     ...mapActions(["addTask", "deleteTask"]),
     handleAddTask() {
       this.addTask({
-        value: uid(), // gerar um novo uid para cada nova task
-        label: this.taskName,
-        category: this.taskCategory,
-        checked: false,
+        name: this.taskName,
+        category: this.taskCategory.value,
       });
       this.hideAddTaskScreen();
     },
     toggleMenu() {
       this.homeScreenActive = !this.homeScreenActive;
     },
-    showCategoryScreen(category) {
-      this.currentCategory = category;
+    showCategoryScreen() {
       this.categoryScreenActive = true;
-      this.$refs.wrapper.classList.add("show-category");
+      this.blackBackdropActive = true;
     },
     hideCategoryScreen() {
       this.categoryScreenActive = false;
-      this.$refs.wrapper.classList.remove("show-category");
+      this.blackBackdropActive = false;
     },
     showAddTaskScreen() {
       this.addTaskScreenActive = true;
@@ -176,23 +160,11 @@ export default {
       this.categoryScreenActive = false;
       this.addTaskScreenActive = false;
       this.blackBackdropActive = false;
-      this.$refs.wrapper.classList.remove("show-category");
-    },
-    getCategoryImage(category) {
-      return this.categoryImg(category);
-    },
-    getCategoryLabel(category) {
-      const cat = this.allCategories.find((c) => c.value === category);
-      return cat ? cat.label : "";
-    },
-    deleteTask(taskId) {
-      this.deleteTask(taskId);
     },
   },
   mounted() {
     this.homeScreenActive = true;
-    this.taskCategory = this.allCategories[0].value; // definir a primeira categoria como padrão ao iniciar
-    this.currentCategory = this.taskCategory; // inicializar a categoria atual com a primeira categoria
+    this.taskCategory = this.allCategories[0];
   },
 };
 </script>
