@@ -59,6 +59,15 @@ export default new Vuex.Store({
     },
   },
   getters: {
+    categoryImg: (state) => (category) => {
+      const categoryItem = state.categories.find(
+        (cat) => cat.value === category
+      );
+      return categoryItem ? categoryItem.img : null;
+    },
+    tasksByCategory: (state) => (category) => {
+      return state.tasks.filter((task) => task.category === category);
+    },
     allTasks: (state) => state.tasks,
     totalTasks: (state) => state.tasks.length,
     allCategories: (state) => state.categories,
