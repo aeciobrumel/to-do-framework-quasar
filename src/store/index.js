@@ -38,7 +38,7 @@ export default new Vuex.Store({
       state.tasks.push(task);
     },
     DELETE_TASK(state, taskId) {
-      state.tasks = state.tasks.filter((task) => task.id !== taskId);
+      state.tasks = state.tasks.filter((task) => task.value !== taskId);
     },
     UPDATE_TASK(state, taskId, updatedTask) {
       state.tasks = state.tasks.map((task) => task.value !== taskId ? task : {...task, ...updatedTask})
@@ -46,7 +46,7 @@ export default new Vuex.Store({
   },
   actions: {
     addTask({ commit }, task) {
-      commit("ADD_TASK", task);
+      commit("ADD_TASK", { value: uid(), checked: false, ...task});
     },
     deleteTask({ commit }, taskId) {
       commit("DELETE_TASK", taskId);
@@ -62,6 +62,8 @@ export default new Vuex.Store({
     allTasks: (state) => state.tasks,
     totalTasks: (state) => state.tasks.length,
     allCategories: (state) => state.categories,
+    allCategoryTasks: (state) => (value) =>
+      state.tasks.filter((task) => task.category === value),
     totalCategories: (state) => state.categories.length,
     totalCategoryTasks: (state) => (value) =>
       state.tasks.filter((task) => task.category === value).length,

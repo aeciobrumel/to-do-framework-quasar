@@ -3,66 +3,67 @@
     <div class="wrapper" :class="{ 'show-category': categoryScreenActive }">
     <!-- <div class="wrapper"> -->
       <div class="screen-backdrop"></div>
+
       <div class="home-screen screen" :class="{ active: homeScreenActive }">
         <div class="head-wrapper">
           <div class="welcome">
             <div class="content">
               <h3>Olá Rodrigo</h3>
               <p>
-                Você tem no total <span>{{ totalTasks }}</span> tasks cadastradas
+                Você tem no total <span>{{ totalTasks }}</span> task(s) cadastradas
               </p>
             </div>
-            <div class="avatar">
+            <div class="avatar" @click="handleLog">
               <div class="backdrop"></div>
-              <img src="../assets/img/boy.png" alt="" />
+              <img src="../assets/img/boy.png" alt="boy" />
             </div>
           </div>
         </div>
         <div class="categories-wrapper">
           <div class="categories" v-for="category in allCategories" :key="category.value">
-            <div class="category" @click="showCategoryScreen">
+            <div class="category" @click="handleSelectCategory(category)">
               <img :src="category.img" :alt="category.label" />
               <div class="content">
                 <h4>{{category.label}}</h4>
-                <p>{{ totalCategoryTasks(category.value) }} Tasks</p>
+                <p>{{ totalCategoryTasks(category.value) }} Task(s)</p>
               </div>
             </div>
           </div>
         </div>
       </div>
+
       <div
         class="category-screen screen"
         :class="{ active: categoryScreenActive }"
       >
         <div class="head-wrapper">
-          <div class="q-btn" @click="hideCategoryScreen">
+          <div class="q-btn" @click="handleUnselectCategory">
             <q-icon name="arrow_back" />
           </div>
         </div>
-        <div class="category-details">
-          <img src="statics/images/boy.png" alt="" id="category-img" />
+        <div class="category-details" v-if="selectedCategory">
+          <img :src="selectedCategory.img" :alt="selectedCategory.label" />
           <div class="details">
-            <p id="num-tasks">8 tasks</p>
-            <h1 id="category-title">Pessoal</h1>
+            <p id="num-tasks">{{ totalCategoryTasks(selectedCategory.value) }} task(s)</p>
+            <h2 id="category-title">{{ selectedCategory.label }}</h2>
           </div>
         </div>
-        <div class="tasks-wrapper">
+        <div class="tasks-wrapper" v-if="selectedCategory && totalCategoryTasks(selectedCategory.value)">
           <div class="tasks">
-            <div class="task-wrapper" v-for="task in allTasks" :key="task.value">
+            <div class="task-wrapper" v-for="task in allCategoryTasks(selectedCategory.value)" :key="task.value">
               <label for="task" class="task">
-                <input type="checkbox" :name="task.name" :id="task.value" />
-                <span class="checkmark">
-                  <q-icon name="check" />
-                </span>
-                <p>{{ task.name }}</p>
+                <q-checkbox v-model="task.checked"/>
+                <p>{{ task.label }}</p>
               </label>
-              <div class="delete" @click="deleteTask(task.value)">
-                <q-icon name="delete" />
-              </div>
+              <q-btn @click="handleDeleteTask(task.value)" round color="deep-orange" icon="delete" size="sm" outline />
             </div>
           </div>
         </div>
+        <div class="tasks-wrapper empty" v-else>
+          Lista Vazia
+        </div>
       </div>
+
       <div class="add-task-btn" @click="showAddTaskScreen">
         <q-icon name="add" />
       </div>
@@ -75,11 +76,11 @@
         <div class="add-task-backdrop"></div>
         <div class="input-group">
           <label for="task-input">Task</label>
-          <q-input v-model="taskName" placeholder="Digite aqui" style="width: 100%;"/>
+          <q-input v-model="newTaskName" placeholder="Digite aqui" style="width: 100%;"/>
         </div>
         <div class="input-group" >
           <label for="category-select">Categoria</label>
-          <q-select v-model="taskCategory" outlined :options="allCategories" style="width: 100%;"/>
+          <q-select v-model="newTaskCategory" outlined :options="allCategories" style="width: 100%;"/>
         </div>
         <div class="btns">
           <button class="cancel-btn" @click="hideAddTaskScreen">
@@ -98,8 +99,10 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
-      taskName: "",
-      taskCategory: "",
+      newTaskName: null,
+      newTaskCategory: null,
+      selectedCategory: null,
+      selectedCategoryTasks: null,
       homeScreenActive: false,
       categoryScreenActive: false,
       addTaskScreenActive: false,
@@ -107,16 +110,34 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["totalTasks", "totalCategories", "allTasks", "allCategories", "totalCategoryTasks"])
+    ...mapGetters(["totalTasks", "totalCategories", "allTasks", "allCategories", "allCategoryTasks", "totalCategoryTasks"])
   },
   methods: {
-    ...mapActions(["addTask", "deleteTask"]),
+    ...mapActions(["addTask", "deleteTask", "updateTask"]),
+    handleLog() {
+      console.log('tasks', this.allTasks)
+      console.log('categories', this.allCategories)
+    },
     handleAddTask() {
       this.addTask({
-        name: this.taskName,
-        category: this.taskCategory.value,
+        label: this.newTaskName,
+        category: this.newTaskCategory.value,
       });
+      this.newTaskName = null;
       this.hideAddTaskScreen();
+    },
+    handleDeleteTask(task) {
+      this.deleteTask(task);
+    },
+    handleSelectCategory(category) {
+      this.selectedCategory = category;
+      this.newTaskCategory = category;
+      this.showCategoryScreen();
+    },
+    handleUnselectCategory() {
+      this.selectedCategory = null;
+      this.newTaskCategory = this.allCategories[0];
+      this.hideCategoryScreen();
     },
     toggleMenu() {
       this.homeScreenActive = !this.homeScreenActive;
@@ -138,7 +159,6 @@ export default {
       this.blackBackdropActive = false;
     },
     hideAllScreens() {
-      this.categoryScreenActive = false;
       this.addTaskScreenActive = false;
       this.blackBackdropActive = false;
     },
@@ -146,7 +166,7 @@ export default {
 
   mounted() {
     this.homeScreenActive = true;
-    this.taskCategory = this.allCategories[0];
+    this.newTaskCategory = this.allCategories[0];
   },
 };
 </script>

@@ -38,6 +38,13 @@ body {
   }
 }
 
+.wrapper {
+  height: 50rem;
+  width: 25rem;
+  border-radius: 40px;
+  border: 10px solid #2e2e2e;
+}
+
 .wrapper .screen {
   min-width: 100%;
   flex: 1;
@@ -200,10 +207,11 @@ body {
 
 .category-details {
   padding: 0 30px;
-  margin-top: 7rem;
+  margin-top: 1.5rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 .category-details img {
@@ -221,6 +229,14 @@ body {
   height: calc(100% - 12rem);
   padding-bottom: 20px;
   overflow: auto;
+}
+
+.tasks-wrapper.empty {
+  color: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 6rem;
 }
 
 .tasks {
@@ -447,4 +463,8 @@ button.add-btn {
 .black-backdrop.active {
   opacity: 1;
   visibility: visible;
+}
+
+p {
+  margin: 0;
 }
