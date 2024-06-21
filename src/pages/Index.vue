@@ -141,14 +141,12 @@ export default {
       this.homeScreenActive = !this.homeScreenActive;
     },
     showCategoryScreen() {
-      console.log("Showing category screen");
       this.categoryScreenActive = true;
       this.blackBackdropActive = false;
     },
     hideCategoryScreen() {
-      console.log("Hiding category screen");
       this.categoryScreenActive = false;
-      this.$refs.wrapper.classList.remove("show-category");
+      this.blackBackdropActive = false;
     },
     showAddTaskScreen() {
       this.addTaskScreenActive = true;
@@ -161,7 +159,6 @@ export default {
     hideAllScreens() {
       this.addTaskScreenActive = false;
       this.blackBackdropActive = false;
-      this.$refs.wrapper.classList.remove("show-category");
     },
   },
 
