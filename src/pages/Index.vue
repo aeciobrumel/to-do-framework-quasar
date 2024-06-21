@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <div class="wrapper" ref="wrapper">
+    <div class="wrapper" :class="{ 'show-category': categoryScreenActive }">
       <div class="screen-backdrop"></div>
       <div class="home-screen screen" :class="{ active: homeScreenActive }">
         <div class="head-wrapper">
@@ -38,13 +38,12 @@
           </div>
         </div>
       </div>
-
       <div
         class="category-screen screen"
         :class="{ active: categoryScreenActive }"
       >
         <div class="head-wrapper">
-          <div class="back-btn" @click="hideCategoryScreen">
+          <div class="q-btn" @click="hideCategoryScreen">
             <q-icon name="arrow_back" />
           </div>
         </div>
@@ -79,7 +78,6 @@
           </div>
         </div>
       </div>
-
       <div class="add-task-btn" @click="showAddTaskScreen">
         <q-icon name="add" />
       </div>
@@ -155,7 +153,7 @@ export default {
     showCategoryScreen() {
       console.log("Showing category screen");
       this.categoryScreenActive = true;
-      this.$refs.wrapper.classList.add("show-category");
+      this.blackBackdropActive = false;
     },
     hideCategoryScreen() {
       console.log("Hiding category screen");
@@ -177,6 +175,7 @@ export default {
       this.$refs.wrapper.classList.remove("show-category");
     },
   },
+
   mounted() {
     this.homeScreenActive = true;
     this.taskCategory = this.allCategories[0];

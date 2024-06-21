@@ -45,6 +45,9 @@ export default new Vuex.Store({
     DELETE_TASK(state, taskId) {
       state.tasks = state.tasks.filter((task) => task.value !== taskId);
     },
+    UPDATE_TASK(state, taskId, updatedTask) {
+      state.tasks = state.tasks.map((task) => task.value !== taskId ? task : {...task, ...updatedTask})
+    }
   },
   actions: {
     addTask({ commit }, task) {
@@ -52,6 +55,12 @@ export default new Vuex.Store({
     },
     deleteTask({ commit }, taskId) {
       commit("DELETE_TASK", taskId);
+    },
+    updatedTask({commit}, taskId, updatedTask){
+      commit("UPDATE_TASK", taskId, updatedTask)
+    },
+    toggleTask({commit}, taskId, checked){
+      commit("UPDATE_TASK", taskId, { checked })
     },
   },
   getters: {
