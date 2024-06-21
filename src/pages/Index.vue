@@ -1,7 +1,6 @@
 <template>
   <q-page class="flex flex-center">
     <div class="wrapper" :class="{ 'show-category': categoryScreenActive }">
-    <!-- <div class="wrapper"> -->
       <div class="screen-backdrop"></div>
 
       <div class="home-screen screen" :class="{ active: homeScreenActive }">
@@ -78,7 +77,7 @@
           <label for="task-input">Task</label>
           <q-input v-model="newTaskName" placeholder="Digite aqui" style="width: 100%;"/>
         </div>
-        <div class="input-group" >
+        <div class="input-group">
           <label for="category-select">Categoria</label>
           <q-select v-model="newTaskCategory" outlined :options="allCategories" style="width: 100%;"/>
         </div>
@@ -92,7 +91,6 @@
     </div>
   </q-page>
 </template>
-
 <script>
 import { mapGetters, mapActions } from "vuex";
 
