@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <div class="wrapper" :class="{ 'show-category': categoryScreenActive }">
+    <div class="wrapper">
       <div class="screen-backdrop"></div>
       <div class="home-screen screen" :class="{ active: homeScreenActive }">
         <div class="head-wrapper">
@@ -14,7 +14,7 @@
             </div>
             <div class="avatar">
               <div class="backdrop"></div>
-              <img src="../assets/img/boy.png" alt="" />
+              <img :src="getCategoryImage('personal')" alt="Avatar" />
             </div>
           </div>
         </div>
@@ -24,11 +24,7 @@
             v-for="category in allCategories"
             :key="category.value"
           >
-            <div
-              class="category"
-              @click="showCategoryScreen"
-              :key="category.value"
-            >
+            <div class="category" @click="showCategoryScreen">
               <img :src="category.img" :alt="category.label" />
               <div class="content">
                 <h4>{{ category.label }}</h4>
@@ -38,32 +34,25 @@
           </div>
         </div>
       </div>
-      <div
+      <!-- <div
         class="category-screen screen"
         :class="{ active: categoryScreenActive }"
       >
         <div class="head-wrapper">
-          <div class="q-btn" @click="hideCategoryScreen">
+          <div class="back-btn" @click="hideCategoryScreen">
             <q-icon name="arrow_back" />
           </div>
         </div>
         <div class="category-details">
+          <img src="statics/images/boy.png" alt="" id="category-img" />
           <div class="details">
-            <!--numero tasks categoria-->
-
-            <p id="num-tasks">{{ totalCategoryTasks }}tasks</p>
-            <!--numero tasks categoria-->
-            <h1 id="category-title">{{ categoryTasks }} nome</h1>
-            <!--nome categoria-->
+            <p id="num-tasks">8 tasks</p>
+            <h1 id="category-title">Pessoal</h1>
           </div>
         </div>
         <div class="tasks-wrapper">
           <div class="tasks">
-            <div
-              class="task-wrapper"
-              v-for="task in categoryTasks"
-              :key="task.value"
-            >
+            <div class="task-wrapper" v-for="task in allTasks" :key="task.value">
               <label for="task" class="task">
                 <input type="checkbox" :name="task.name" :id="task.value" />
                 <span class="checkmark">
@@ -77,7 +66,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
       <div class="add-task-btn" @click="showAddTaskScreen">
         <q-icon name="add" />
       </div>
@@ -115,6 +104,7 @@
     </div>
   </q-page>
 </template>
+
 <script>
 import { mapGetters, mapActions } from "vuex";
 
@@ -151,14 +141,12 @@ export default {
       this.homeScreenActive = !this.homeScreenActive;
     },
     showCategoryScreen() {
-      console.log("Showing category screen");
       this.categoryScreenActive = true;
-      this.blackBackdropActive = false;
+      this.blackBackdropActive = true;
     },
     hideCategoryScreen() {
-      console.log("Hiding category screen");
       this.categoryScreenActive = false;
-      this.$refs.wrapper.classList.remove("show-category");
+      this.blackBackdropActive = false;
     },
     showAddTaskScreen() {
       this.addTaskScreenActive = true;
@@ -172,10 +160,8 @@ export default {
       this.categoryScreenActive = false;
       this.addTaskScreenActive = false;
       this.blackBackdropActive = false;
-      this.$refs.wrapper.classList.remove("show-category");
     },
   },
-
   mounted() {
     this.homeScreenActive = true;
     this.taskCategory = this.allCategories[0];
