@@ -18,12 +18,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     tasks: [
-      {
-        value: uid(),
-        label: "Finish college",
-        category: "personal",
-        checked: false,
-      },
+      { value: uid(), label: "Finish college", category: "personal", checked: false },
     ],
     categories: [
       { value: "personal", label: "Pessoal", img: boy },
@@ -51,7 +46,7 @@ export default new Vuex.Store({
   },
   actions: {
     addTask({ commit }, task) {
-      commit("ADD_TASK", task);
+      commit("ADD_TASK", { value: uid(), checked: false, ...task});
     },
     deleteTask({ commit }, taskId) {
       commit("DELETE_TASK", taskId);
@@ -64,18 +59,11 @@ export default new Vuex.Store({
     },
   },
   getters: {
-    categoryImg: (state) => (category) => {
-      const categoryItem = state.categories.find(
-        (cat) => cat.value === category
-      );
-      return categoryItem ? categoryItem.img : null;
-    },
-    tasksByCategory: (state) => (category) => {
-      return state.tasks.filter((task) => task.category === category);
-    },
     allTasks: (state) => state.tasks,
     totalTasks: (state) => state.tasks.length,
     allCategories: (state) => state.categories,
+    allCategoryTasks: (state) => (value) =>
+      state.tasks.filter((task) => task.category === value),
     totalCategories: (state) => state.categories.length,
     totalCategoryTasks: (state) => (value) =>
       state.tasks.filter((task) => task.category === value).length,
