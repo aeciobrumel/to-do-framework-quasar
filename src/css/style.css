@@ -38,13 +38,6 @@ body {
   }
 }
 
-.wrapper {
-  height: 50rem;
-  width: 25rem;
-  border-radius: 40px;
-  border: 10px solid #2e2e2e;
-}
-
 .wrapper .screen {
   min-width: 100%;
   flex: 1;
