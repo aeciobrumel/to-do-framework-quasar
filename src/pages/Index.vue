@@ -7,7 +7,7 @@
         <div class="head-wrapper">
           <div class="welcome">
             <div class="content">
-              <h3>Olá Rodrigo</h3>
+              <h3>Olá Elmario</h3>
               <p>
                 Você tem no total <span>{{ totalTasks }}</span> task(s) cadastradas
               </p>
